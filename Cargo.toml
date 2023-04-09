@@ -1,0 +1,28 @@
+[package]
+name = "monzilla_rs"
+version = "0.0.0"
+edition = "2021"
+authors = ["John Lyon-Smith <john@lyon-smith.org>"]
+description = "Monzilla file monitor"
+repository = "https://github.com/jlyonsmith/monzilla_rs"
+readme = "README.md"
+keywords = []
+categories = []
+license = "Unlicense"
+
+[dependencies]
+clap = { version = "4.0.7", features = ["derive"] }
+colored = "^2.0.0"
+easy-error = "1.0.0"
+lazy_static = "1.4.0"
+
+[dev-dependencies]
+criterion = "^0.3"
+
+[[bench]]
+name = "benchmarks"
+harness = false
+
+[[bin]]
+name = "monzilla"
+path = "src/bin/monzilla.rs"
