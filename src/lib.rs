@@ -2,7 +2,11 @@ mod log_macros;
 
 use clap::Parser;
 use core::fmt::Arguments;
-use std::error::Error;
+use std::{
+    error::Error,
+    io::{self, Read, Write},
+};
+use termios::{tcsetattr, Termios, ECHO, ICANON, ISIG, TCSANOW};
 
 pub trait MonzillaLog {
     fn output(self: &Self, args: Arguments);
@@ -37,6 +41,44 @@ impl<'a> MonzillaTool<'a> {
                 return Ok(());
             }
         };
+
+        let stdin = 0i32;
+        let termios = Termios::from_fd(stdin)?;
+        let mut new_termios = termios.clone();
+
+        // Set new terminal flags to disable canonical mode, echo and signal handling
+        new_termios.c_lflag &= !(ICANON | ECHO | ISIG);
+        tcsetattr(stdin, TCSANOW, &mut new_termios)?;
+
+        self.run_loop()?;
+
+        tcsetattr(stdin, TCSANOW, &termios)?;
+        Ok(())
+    }
+
+    fn run_loop(&self) -> Result<(), Box<dyn Error>> {
+        let stdout = io::stdout();
+        let mut reader = io::stdin();
+        let mut buffer = [0; 1]; // read exactly one byte
+
+        println!("Press ^C to stop monitoring and terminate the process. Press ^R to restart the process.");
+        stdout.lock().flush()?;
+
+        loop {
+            reader.read_exact(&mut buffer).unwrap();
+
+            match buffer[0] {
+                3 => {
+                    println!("Terminating...");
+                    break;
+                }
+                18 => {
+                    println!("Restarting");
+                    stdout.lock().flush()?;
+                }
+                _ => continue,
+            }
+        }
 
         Ok(())
     }
