@@ -11,11 +11,16 @@ categories = []
 license = "Unlicense"
 
 [dependencies]
-clap = { version = "4.0.7", features = ["derive"] }
-colored = "^2.0.0"
+clap = { version = "4.2.5", features = ["derive", "env"] }
+command-group = "2.1.0"
+crossbeam = "0.8.2"
 easy-error = "1.0.0"
+glob = "0.3.1"
 lazy_static = "1.4.0"
+notify = "5.1.0"
+notify-debouncer-mini = "0.2.1"
 termios = "0.3.3"
+yansi = "0.5.1"
 
 [dev-dependencies]
 criterion = "^0.3"

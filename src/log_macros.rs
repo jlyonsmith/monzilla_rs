@@ -1,12 +1,23 @@
 #[macro_export]
-macro_rules! output {
+macro_rules! plain {
   ($log: expr, $fmt: expr) => {
-    $log.output(format_args!($fmt))
+    $log.plain(format_args!($fmt))
   };
   ($log: expr, $fmt: expr, $($args: tt)+) => {
-    $log.output(format_args!($fmt, $($args)+))
+    $log.plain(format_args!($fmt, $($args)+))
   };
 }
+
+#[macro_export]
+macro_rules! info {
+  ($log: expr, $fmt: expr) => {
+    $log.info(format_args!($fmt))
+  };
+  ($log: expr, $fmt: expr, $($args: tt)+) => {
+    $log.info(format_args!($fmt, $($args)+))
+  };
+}
+
 #[macro_export]
 macro_rules! warning {
   ($log: expr, $fmt: expr) => {

@@ -12,7 +12,9 @@ fn benchmark_1(arg: &str) {
     }
 
     impl MonzillaLog for TestLogger {
-        fn output(self: &Self, _args: Arguments) {}
+        fn disable_color(self: &Self) {}
+        fn plain(self: &Self, _args: Arguments) {}
+        fn info(self: &Self, _args: Arguments) {}
         fn warning(self: &Self, _args: Arguments) {}
         fn error(self: &Self, _args: Arguments) {}
     }

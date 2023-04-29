@@ -1,6 +1,6 @@
-use colored::Colorize;
 use core::fmt::Arguments;
 use monzilla_rs::{error, MonzillaLog, MonzillaTool};
+use yansi::Paint;
 
 struct MonzillaLogger;
 
@@ -11,14 +11,21 @@ impl MonzillaLogger {
 }
 
 impl MonzillaLog for MonzillaLogger {
-    fn output(self: &Self, args: Arguments) {
-        println!("{}", args);
+    fn disable_color(&self) {
+        Paint::disable();
     }
-    fn warning(self: &Self, args: Arguments) {
-        eprintln!("{}", format!("warning: {}", args).yellow());
+
+    fn plain(&self, args: Arguments) {
+        eprintln!("{}", args);
     }
-    fn error(self: &Self, args: Arguments) {
-        eprintln!("{}", format!("error: {}", args).red());
+    fn info(&self, args: Arguments) {
+        eprintln!("{}", Paint::green(format!("[monzilla] {}", args)));
+    }
+    fn warning(&self, args: Arguments) {
+        eprintln!("{}", Paint::yellow(format!("[monzilla] warning: {}", args)));
+    }
+    fn error(&self, args: Arguments) {
+        eprintln!("{}", Paint::red(format!("[monzilla] error: {}", args)));
     }
 }
 
