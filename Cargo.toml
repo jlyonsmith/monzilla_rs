@@ -1,6 +1,6 @@
 [package]
 name = "monzilla_rs"
-version = "0.0.0"
+version = "1.0.0"
 edition = "2021"
 authors = ["John Lyon-Smith <john@lyon-smith.org>"]
 description = "Monzilla file monitor"
