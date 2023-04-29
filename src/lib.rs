@@ -41,6 +41,10 @@ struct Cli {
     #[arg(long = "dir", short = 'd', default_value = ".")]
     cmd_dir: PathBuf,
 
+    /// Debounce time
+    #[arg(long = "debounce", short = 't', default_value = "500")]
+    debounce_millis: u64,
+
     /// One or more file globs to watch
     #[arg(long = "glob", short = 'g', num_args = 1.., value_name = "GLOB", required = true)]
     globs: Vec<String>,
@@ -114,8 +118,9 @@ impl<'a> MonzillaTool<'a> {
 
         let (ui_tx, ui_rx) = channel::unbounded::<UiEvent>();
         let (notify_tx, notify_rx) = channel::unbounded::<DebounceEventResult>();
-        let mut debouncer = new_debouncer(Duration::from_millis(500), None, notify_tx)
-            .context("Unable to create watcher")?;
+        let mut debouncer =
+            new_debouncer(Duration::from_millis(cli.debounce_millis), None, notify_tx)
+                .context("Unable to create watcher")?;
 
         // Add all paths to be watched
         for path in paths {
